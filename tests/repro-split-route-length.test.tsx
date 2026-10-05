@@ -3,7 +3,7 @@ import { pcb_trace } from "circuit-json"
 import { Circuit } from "tscircuit"
 import { analyzeCircuitJsonTraceLength } from "../lib"
 
-test("a routed net with three PCB traces is reported as a straight line", async () => {
+test("a routed net measures all three PCB traces without extra connecting segments", async () => {
   const circuit = new Circuit()
   circuit.add(
     <board width={12} height={10} routingDisabled schAutoLayoutEnabled>
@@ -66,7 +66,6 @@ test("a routed net with three PCB traces is reported as a straight line", async 
     circuitJson.filter((element) => element.type === "pcb_trace"),
   ).toHaveLength(3)
   expect(analysis.totalStraightLineDistanceMm).toBe(6)
-  // Captures the bug: the physical route is 12 mm long.
-  expect(analysis.totalLengthMm).toBe(6)
+  expect(analysis.totalLengthMm).toBe(12)
   expect(analysis.toString()).toMatchSnapshot()
 })
